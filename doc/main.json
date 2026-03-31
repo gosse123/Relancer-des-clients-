@@ -1,0 +1,125 @@
+{
+  "name": "charriow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "relance-client",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -784,
+        -160
+      ],
+      "name": "Webhook1",
+      "id": "5d1e2e99-e866-43b7-ad7c-89331cc420bb",
+      "webhookId": "3e388d7f-ad3d-415e-a53b-024fdbc8fca9"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "32105ad1-546b-4530-9f7b-1bc5f82a5f76",
+              "leftValue": "={{$json[\"body\"][\"status\"]}}",
+              "rightValue": "failed",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "95169a6c-bf27-490f-8c8f-60f06aeacd8d",
+              "leftValue": "={{$json[\"body\"][\"status\"]}}",
+              "rightValue": "abandoned",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -576,
+        -160
+      ],
+      "id": "62220317-131c-4fce-a199-4beefe8530c6",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{$json[\"body\"][\"email\"]}}",
+        "subject": "commande abondonner",
+        "message": "=Salut {{$json[\"body\"][\"name\"] || \"client\"}},  \nTu étais à deux doigts de finaliser ta commande 👀  \nTon produit t’attend toujours : {{$json[\"body\"][\"product\"] || \"ton produit\"}}  \n⏳ Les stocks sont limités.  \n👉 Termine ta commande ici : https://qktmaxjc.mychariow.shop  \nÀ très vite.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        -368,
+        -256
+      ],
+      "id": "4d982c00-867e-4fb4-9238-66adc1b45d3e",
+      "name": "Send a message",
+      "webhookId": "39a897e3-2af6-46e9-afc9-e438a28a1c69",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "MCpsH2KL13nkgZA0",
+          "name": "Gmail account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook1": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "0f203b2d-b0c2-4e07-a8cd-2b273da876f0",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "46e975f8a1c6490246bc035f020aa42995aa435f999da805c73d0fb9162a2c21"
+  },
+  "id": "4XNco12emHtClscn",
+  "tags": []
+}
